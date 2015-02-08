@@ -59,8 +59,6 @@ namespace IES {
                 }
                 out << ")" << " VALUES (";
                 first = true;
-                int count_int = 0;
-                int count_str = 0;
                 for (Column &c : columns) {
                     if (first)first = false;
                     else out << ",";
@@ -68,13 +66,12 @@ namespace IES {
                     switch (c.fmtType) {
 
                         case NUMBER:
-                            out << r.numbers[count_int];
-                            count_int++;
+                            out << r.numbers[c.index];
                             break;
                         case STRING:
-                            if (r.strings[count_str].empty())out << "None";
-                            else out << "'" << escapeSQL(r.strings[count_str]) << "'";
-                            count_str++;
+                        case STRING2:
+                            if (r.strings[c.index].empty())out << "None";
+                            else out << "'" << escapeSQL(r.strings[c.index]) << "'";
                             break;
                         default:
                             out << "NULL";
@@ -116,28 +113,18 @@ namespace IES {
             out << "<idspace id=\""<< header.Filename <<"\">" << endl;
             for (Row &r: rows) {
                 out << "\t<Class ";
-
-                int count_int = 0;
-                int count_str = 0;
-                int count_str2 = 0;
                 for (Column &c : columns) {
                     out <<" "<< c.name1 << "=";
 
                     switch (c.fmtType) {
 
                         case NUMBER:
-                            out << "\"" << r.numbers[count_int] <<"\"";
-                            count_int++;
+                            out << "\"" << r.numbers[c.index] <<"\"";
                             break;
                         case STRING:
-                            if (r.strings[count_str].empty())out << "\"None\"";
-                            else out << "\"" << escapeXML(r.strings[count_str]) << "\"";
-                            count_str++;
-                            break;
                         case STRING2:
-                            if (r.strings2[count_str2].empty())out << "\"None\"";
-                            else out << "\"" << escapeXML(r.strings2[count_str2]) << "\"";
-                            count_str2++;
+                            if (r.strings[c.index].empty())out << "\"None\"";
+                            else out << "\"" << escapeXML(r.strings[c.index]) << "\"";
                             break;
                         default:
                             cout << "unknown type, using NULL " << endl;

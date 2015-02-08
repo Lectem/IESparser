@@ -51,8 +51,6 @@ namespace IES {
         uint16_t Columns; // total number of int and string columns
         uint16_t ColInt; // cols which are ints
         uint16_t ColString; // cols which are strings
-        int ColString1=0;
-        int ColString2=0;
         Info(){}
         Info(istream & in)
         {
@@ -76,13 +74,14 @@ namespace IES {
         char name1[64] ={};
         char name2[64] ={};
         Fmt fmtType = NUMBER;
-        uint32_t _unknown=0;
+        uint32_t index =0;
         Column(){}
         Column(istream & in)
         {
-            in.read((char*)this, sizeof(name1)+sizeof(name2)+sizeof(fmtType)+ sizeof(_unknown));
+            in.read((char*)this, sizeof(name1)+sizeof(name2)+sizeof(fmtType)+ sizeof(index));
             XORStr(name1,64);
             XORStr(name2,64);
+            cout << *this << endl;
         }
 
         friend std::ostream& operator<<( std::ostream& out, const Column & c)
@@ -91,7 +90,7 @@ namespace IES {
             out << "name1 :\t\t" <<     c.name1 << endl;
             out << "name2 :\t\t"<<      c.name2 << endl;
             out << "fmtType:\t"<<       c.fmtType <<endl;
-            out << "unknown:\t\t"<<    c._unknown << endl;
+            out << "index:\t\t"<<    c.index << endl;
             return out;
         }
 
@@ -139,13 +138,9 @@ namespace IES {
                     numbers.emplace_back(tmpFloat);
                 }
             }
-            for(int i=0;i<info.ColString1;++i)
+            for(int i=0;i<info.ColString;++i)
             {
                 strings.push_back(readXORStr(in));
-            }
-            for(int i=0;i<info.ColString2;++i)
-            {
-                strings2.push_back(readXORStr(in));
             }
         }
         friend std::ostream& operator<< ( std::ostream& out, const Row & r)
@@ -217,8 +212,6 @@ namespace IES {
                                 break;
                         }
                     }
-                    info.ColString1=count_str;
-                    info.ColString2=count_str2;
                     if(count_unkw)cout << count_unkw << " columns of unknwon type"<<endl;
                     assert(count_int == info.ColInt);
                     assert(count_str + count_str2 == info.ColString);
