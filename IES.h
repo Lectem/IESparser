@@ -252,7 +252,6 @@ namespace IES {
             {
                 out << c;
             }
-
             out << "=======ROWS:"<< ies.rows.size() <<"=======" << endl;
             /*for(auto &r : ies.rows)
             {

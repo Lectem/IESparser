@@ -91,13 +91,27 @@ namespace IES {
         escaped.reserve(n * 2);
 
         for (std::size_t i = 0; i < n; ++i) {
-            if ( s[i] == '\"')
+            switch (s[i])
             {
-                escaped += "&quot;";
-            }
-            else
-            {
-                escaped += s[i];
+                case '\"' :
+                    escaped += "&quot;";
+                    break;
+                case '\'':
+                    escaped += "&apos;";
+                    break;
+                case '<':
+                    escaped += "&lt;";
+                    break;
+                case '>':
+                    escaped += "&gt;";
+                    break;
+                case '&':
+                    escaped += "&amp;";
+                    break;
+                default:
+                    escaped+=s[i];
+                    break;
+
             }
         }
         return escaped;
