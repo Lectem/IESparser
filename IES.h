@@ -81,7 +81,6 @@ namespace IES {
             in.read((char*)this, sizeof(name1)+sizeof(name2)+sizeof(fmtType)+ sizeof(index));
             XORStr(name1,64);
             XORStr(name2,64);
-            cout << *this << endl;
         }
 
         friend std::ostream& operator<<( std::ostream& out, const Column & c)
