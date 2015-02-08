@@ -5,6 +5,7 @@
 #include <fstream>
 #include <cassert>
 #include <iostream>
+#include <stdexcept>
 
 using namespace std;
 
@@ -192,13 +193,15 @@ namespace IES {
                     input.seekg(0, ios::beg);
 
                     header = input;
-                    assert(header.file_size == fsize);
+                    if(header.file_size != fsize) throw runtime_error("header.file_size != fsize");
                     info = input;
 
-                    assert(info.ColString + info.ColInt == info.Columns);
+                    if(info.ColString + info.ColInt != info.Columns)throw runtime_error("info.ColString + info.ColInt != info.Columns");
 
                     uint32_t OffsetRows = header.file_size - header.offset_hint_b;
                     uint32_t OffsetColumns = header.file_size - (header.offset_hint_b + header.offset_hint_a);
+                    uint16_t unknown =0;
+                    //input.read((char*)&unknown, sizeof(unknown));
                     input.seekg(OffsetColumns, ios::beg);
 
                     int count_int = 0, count_str = 0,count_str2=0 ,count_unkw=0;
@@ -222,9 +225,9 @@ namespace IES {
                         }
                     }
                     if(count_unkw)cout << count_unkw << " columns of unknwon type"<<endl;
-                    assert(count_int == info.ColInt);
-                    assert(count_str + count_str2 == info.ColString);
-                    assert(input.tellg() == OffsetRows);
+                    if(count_int != info.ColInt) throw runtime_error("count_int != info.ColInt");
+                    if(count_str + count_str2 != info.ColString) throw runtime_error("count_str + count_str2 != info.ColString");
+                    if(input.tellg() != OffsetRows) throw runtime_error("input.tellg() != OffsetRows");
                     for (int i = 0; i < info.Rows; ++i) {
                         rows.emplace_back(input, info);
                         input.seekg(info.ColString, ios::cur);
@@ -236,7 +239,7 @@ namespace IES {
                 }
             } catch (exception const &  e )
             {
-                cout << e.what() << endl;
+                cerr << "Exception caught : " << e.what() << endl;
             }
         }
 

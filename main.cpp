@@ -36,7 +36,6 @@ void parseDirectoryRec(string dir)
                         ies.toSQL("output/" + string(entry->d_name).substr(0, string(entry->d_name).length() - 4)+ ".sql", Database::getAssociatedTable(entry->d_name));
                         ies.toXML(curdir+"/" + string(entry->d_name).substr(0, string(entry->d_name).length() - 4) + ".xml");
                     }
-                    else cout << "ignoring " << filename << endl;
                 }
                 else if(DT_DIR == entry->d_type && entry->d_name[0] != '.')
                 {
