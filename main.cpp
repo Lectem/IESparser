@@ -33,7 +33,6 @@ int main(int argc, char * argv[]) {
                             mkdir("output/");
                             ies.toSQL("output/" + string(entry->d_name) + ".sql", argv[2]);
                             ies.toXML("ies/" + string(entry->d_name).substr(0, string(entry->d_name).length() - 4) + ".xml");
-                            cout << ies;
                         }
                         else cout << "ignoring " << filename << endl;
                     }
