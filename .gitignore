@@ -1,0 +1,8 @@
+build
+vs
+output
+ies
+.idea
+*.ies
+*.xml
+*.sql
