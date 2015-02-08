@@ -76,11 +76,21 @@ namespace IES {
         Fmt fmtType = NUMBER;
         uint32_t index =0;
         Column(){}
-        Column(istream & in)
+        Column(istream & in,Info & info)
         {
             in.read((char*)this, sizeof(name1)+sizeof(name2)+sizeof(fmtType)+ sizeof(index));
             XORStr(name1,64);
             XORStr(name2,64);
+            switch (fmtType)
+            {
+                case NUMBER:
+                assert(info.ColInt > index);
+                    break;
+                case STRING:
+                case STRING2:
+                    assert(info.ColString > index);
+                    break;
+            }
         }
 
         friend std::ostream& operator<<( std::ostream& out, const Column & c)
@@ -193,7 +203,7 @@ namespace IES {
 
                     int count_int = 0, count_str = 0,count_str2=0 ,count_unkw=0;
                     for (int i = 0; i < info.Columns; ++i) {
-                        columns.emplace_back(input);
+                        columns.emplace_back(input,info);
                         switch (columns.back().fmtType) {
                             case NUMBER:
                                 count_int++;
