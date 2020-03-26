@@ -11,7 +11,7 @@ Not really meant to used by other people but it might be useful...
 
 
 ## How to compile for those who never used did before
-###Requirements :
+### Requirements :
 * MinGW + MSYS or any other compiler
 * CMake
 * Git (obviously)
